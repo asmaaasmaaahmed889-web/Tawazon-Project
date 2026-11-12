@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tawazon — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      background: radial-gradient(circle at 50% -10%, #eff6ff 0%, #f8fafc 60%, #f1f5f9 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+    }
+
+    .auth-card {
+      max-width: 420px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 2.75rem 2.25rem;
+      box-shadow: 0 12px 35px -8px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(15, 23, 42, 0.04);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .auth-card:hover {
+      box-shadow: 0 16px 42px -10px rgba(15, 23, 42, 0.11), 0 0 1px 1px rgba(15, 23, 42, 0.04);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-brand-badge {
+      width: 125px;
+      height: 125px;
+      margin: 0 auto 1.15rem;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .auth-brand-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 24px rgba(34, 197, 94, 0.4)) drop-shadow(0 4px 12px rgba(14, 165, 233, 0.35));
+      transition: transform 0.3s ease;
+    }
+    .auth-brand-badge:hover img {
+      transform: scale(1.08) rotate(3deg);
+    }
+
+    
+
+    
+
+    
+
+    .auth-brand-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      direction: ltr !important;
+      line-height: 1.1;
+    }
+    .auth-brand-title .brand-tawa {
+      color: #16a34a !important; /* Logo Green */
+      font-weight: 800;
+    }
+    .auth-brand-title .brand-zon {
+      color: #0284c7 !important; /* Logo Wave Blue */
+      font-weight: 800;
+    }
+
+    .auth-brand-sub {
+      color: #64748b;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .auth-group {
+      margin-bottom: 1.35rem;
+    }
+
+    .auth-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 0.45rem;
+    }
+
+    .auth-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-group input {
+      width: 100%;
+      padding: 0.82rem 1.05rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 11px;
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+      background: #f8fafc;
+      color: #0f172a;
+      transition: all 0.2s ease;
+    }
+
+    .auth-group input:focus {
+      background: #ffffff;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .auth-group input::placeholder {
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .btn-auth {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 11px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 6px 18px -4px rgba(37, 99, 235, 0.35);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .btn-auth:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px -4px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn-auth:active {
+      transform: translateY(0);
+    }
+
+    .btn-auth:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .spinner-auth {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-start">
+    <a href="login.html" class="nav-brand"><img src="assets/logo.png" alt="Tawazon Logo" class="brand-logo-img" /><span class="brand-tawa">Tawa</span><span class="brand-zon">zon</span></a>
+  </div>
+  <div class="nav-end">
+    <button class="lang-btn" onclick="i18n.toggle()">العربية</button>
+  </div>
+</nav>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-brand-badge">
+        <img src="assets/logo.png" alt="Tawazon Logo" />
+      </div>
+      <h1 class="auth-brand-title"><span class="brand-tawa">Tawa</span><span class="brand-zon">zon</span></h1>
+      <p class="auth-brand-sub" data-i18n="auth_portal_title">تسجيل الدخول</p>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+      <div class="auth-group">
+        <label for="loginUsername" data-i18n="auth_username">اسم المستخدم</label>
+        <div class="auth-input-wrap">
+          <input type="text" id="loginUsername" placeholder="Username" autocomplete="username" required />
+        </div>
+      </div>
+      <div class="auth-group">
+        <label for="loginPassword" data-i18n="auth_password">كلمة المرور</label>
+        <div class="auth-input-wrap">
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+      </div>
+      <button type="submit" class="btn-auth" id="btnLogin">
+        <span id="btnLoginText" data-i18n="auth_btn_login">تسجيل الدخول</span>
+        <div class="spinner-auth" id="loginSpinner"></div>
+      </button>
+    </form>
+
+    <div class="alert alert-error" id="authError" style="margin-top:1.25rem;"></div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  function showError(msg) {
+    const el = document.getElementById("authError");
+    el.textContent = msg;
+    el.classList.add("show");
+  }
+
+  // Handle Login
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    document.getElementById("authError").classList.remove("show");
+
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value;
+
+    const btn = document.getElementById("btnLogin");
+    const spn = document.getElementById("loginSpinner");
+    const btnText = document.getElementById("btnLoginText");
+
+    btn.disabled = true;
+    spn.style.display = "block";
+
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || (i18n.lang() === "ar" ? "فشل تسجيل الدخول" : "Login failed"));
+      }
+
+      const user = await res.json();
+      AUTH.setUser(user);
+
+      // Redirect based on role
+      if (user.role === "admin") {
+        window.location.href = "index.html";
+      } else {
+        window.location.href = "employee-portal.html";
+      }
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      btn.disabled = false;
+      spn.style.display = "none";
+    }
+  });
+</script>
+
+</body>
+</html>
