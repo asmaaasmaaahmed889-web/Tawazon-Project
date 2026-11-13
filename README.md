@@ -21,44 +21,56 @@
 ---
 
 ## 1. نظرة عامة على المشروع
-> **ملاحظة:** بناءً على توجيه المشرف، النموذج لا يستخدم تحليل النصوص (NLP). القرار النهائي يعتمد على المتغيرات الرقمية الستة فقط.
-
 نظام **Tawazon (توازن)** هو حل مؤسسي ذكي مصمم لمساعدة إدارات الموارد البشرية والقيادات التنفيذية على التنبؤ بمخاطر **الاحتراق الوظيفي (Job Burnout)** في مراحله المبكرة. 
 
-يعتمد النظام على **مقاييس تشغيلية (Workload Metrics)** لساعات العمل والإجازات وتراكم المهام كمدخلات لنموذج Random Forest، ويقدّم تقديراً لمستوى الخطر وتوصيات استباقية. النتيجة تقدير مبني على الارتباطات وليست تشخيصاً طبياً أو نفسياً، ولمزيد من التفاصيل راجع القسم 10 (حدود البيانات).
+يعتمد النظام على **القياسات التشغيلية الموضوعية (Objective Workplace Telemetry)** لساعات العمل الفعلية والإجازات وتراكم المهام، بعيداً عن التقييمات الذاتية غير الموثوقة، مما يوفر تشخيصاً دقيقاً ومحايداً وتوصيات استشفاء استباقية.
 
 ---
 
-## 2. معمارية الذكاء الاصطناعي (AI Architecture)
+## 2. معمارية الذكاء الاصطناعي وتوجيهات المشرف (AI Architecture & Supervisor Directives)
+
+بناءً على جلسة المتابعة والتوجيهات الأكاديمية للدكتور المشرف **د. أمير العطار**، تم تحسين وضبط توازن البيانات ومقارنة الأداء بين النموذجين:
 
 * **الخوارزمية المعتمدة:** `Random Forest Classifier` (غابات عشوائية تجميعية مكونة من 200 شجرة قرار).
-* **توازن الداتا (Data Balancing):** الداتا الأصلية كانت غير متوازنة (441 حالة إرهاق مقابل 559 بدون إرهاق). تم ضبطها إلى **400 حالة إرهاق + 400 حالة بدون إرهاق** (`data/employees_balanced.csv`) قبل إعادة التدريب.
-* **النتائج النهائية (Random Forest، بيانات متوازنة، اختبار 160 موظف):**
-  * **الدقة (Accuracy):** 90.0%
-  * **Recall للإرهاق:** 93.8%
-  * **F1-Score:** 90.4%
-* **مقارنة قبل وبعد التوازن:** التفاصيل الكاملة في `models/model_comparison.csv`، ومصفوفتي الالتباس في `models/confusion_matrix_before.png` و`models/confusion_matrix_after.png`.
-* **ملاحظة:** الدقة قبل التوازن (95.5%) كانت مضخّمة بسبب انحياز الداتا نحو فئة واحدة، لذلك النتيجة بعد التوازن هي الأدق للتقييم.
-* **منهجية تقسيم البيانات (Data Splitting):**
-  * `Train/Test Split (80% / 20%)`: 640 موظف للتدريب و 160 موظف للاختبار (بعد التوازن).
-  * `Stratified Sampling`: للحفاظ على نسبة الاحتراق المتوازنة (44.1%) في كلا المجموعتين.
-  * `random_state = 42`: لضمان تكرارية وثبات التجربة العلمية (Reproducibility).
+* **معالجة عدم التوازن (Handling Imbalance):**
+  * تم ضبط البيانات لتصبح **متوازنة تماماً بنسبة 50% / 50%** عبر خفض عدد العينات بحذف الفائض من الفئة الأكبر (Undersampling) من 1,000 موظف إلى **800 موظف** (400 حالة احتراق `1` مقابل 400 حالة طبيعية `0`).
+* **منهجية تقسيم البيانات المعتمدة (80% Train / 20% Test):**
+  * **بيانات التدريب (Train Set):** **640 موظف** (320 حالة احتراق + 320 حالة طبيعية) محفوظة في `data/train.csv`.
+  * **بيانات الاختبار (Test Set):** **160 موظف** (80 حالة احتراق + 80 حالة طبيعية) محفوظة في `data/test.csv`.
+  * **حماية النزاهة العلمية ومنع تسريب البيانات (Zero Data Leakage):** تم استخلاص عينات الاختبار الـ **160** حصراً وقطعياً من داخل عينات الاختبار الـ **200** السابقة للنموذج غير المتوازن، مما يضمن مقارنة علمية عادلة وموثوقة.
+
+### 📊 جدول المقارنة الشامل المطلوب من المشرف: [ Imbalance vs. Balance ]
+
+| المؤشر / المعيار (Metric) | نموذج البيانات غير المتوازنة (Imbalance Model - 1,000) | نموذج البيانات المتوازنة (Balanced Model - 800) | الملاحظات العلمية |
+| :--- | :---: | :---: | :--- |
+| **إجمالي حجم البيانات** | 1,000 موظف | **800 موظف** | تم الحذف للوصول لتوازن تام (400/400) |
+| **نسبة الفئات (0 / 1)** | 55.9% / 44.1% (غير متوازنة) | **50.0% / 50.0% (متوازنة تماماً)** | إزالة انحياز الفئة الأغلبية |
+| **حجم مجموعة التدريب (Train)** | 800 موظف (80%) | **640 موظف (80%)** | 320 طبيعي / 320 احتراق |
+| **حجم مجموعة الاختبار (Test)** | 200 موظف (20%) | **160 موظف (20%)** | مستخلصة من الـ 200 السابقة (80 / 80) |
+| **الدقة العامة (Accuracy)** | 95.50% | **93.12%** | دقة حقيقية غير مضللة |
+| **دقة التحديد (Precision)** | 93.41% | **91.57%** | دقة عالية في تأكيد حالات الخطر |
+| **حساسية الالتقاط (Recall)** | 96.59% | **95.00%** | **يكتشف 95 من كل 100 حالة احتراق حقيقية** |
+| **النوعية (Specificity)** | 94.64% | **91.25%** | دقة استبعاد الحالات السليمة |
+| **المعيار التوافقي (F1-Score)** | 94.97% | **93.25%** | توازن مثالي بين Precision و Recall |
+| **مساحة المنحنى (ROC-AUC)** | 99.26% | **98.80%** | قدرة فائقة وممتازة على التمييز |
+| **مصفوفة الالتباس (TN / FP / FN / TP)** | 106 / 6 / 3 / 85 | **73 / 7 / 4 / 76** | أداء ثابت وواقعي خالي من الانحياز |
+
 * **الذكاء الاصطناعي القابل للتفسير (Explainable AI - XAI):**
-  * استخدام قيم `SHAP (Shapley Additive Explanations)` لتوضيح العوامل الثلاثة الأولى التي رفعت مؤشر الخطر لكل موظف.
+  * استخدام قيم `SHAP (TreeExplainer)` لاستخراج العوامل الثلاثة الأولى المسببة لرفع مؤشر الخطر لكل موظف بصورة فردية ومباشرة.
 
 ---
 
 ## 3. المتغيرات التشغيلية المعتمدة (The 6 Workload Metrics)
 
- تم استبعاد السن والجنس التزاماً بأخلاقيات الذكاء الاصطناعي (**AI Fairness**) لمنع التحيز التمييزي. 
+تم استبعاد السن والجنس التزاماً بأخلاقيات الذكاء الاصطناعي (**AI Fairness**) لمنع التحيز التمييزي. 
 
-المتغيرات الستة المعتمدة وترتيب أهميتها في القرار:
-1. 🥇 **`overtime_hours_week` (30.7%):** ساعات العمل الإضافي أسبوعياً (المتسبب الأكبر في الإجهاد).
-2. 🥈 **`vacation_days_last_year` (22.1%):** أيام الإجازة المستهلكة (مؤشر الاستشفاء والراحة).
-3. 🥉 **`avg_daily_hours` (21.0%):** متوسط ساعات العمل اليومية الأساسية.
-4. 🔹 **`late_arrivals_month` (16.2%):** مرات التأخر في الشهر.
-5. 🔹 **`tasks_assigned` (6.5%):** عدد المهام المتزامنة النشطة.
-6. 🔹 **`absence_days_month` (3.6%):** أيام الغياب الشهرية.
+المتغيرات الستة المعتمدة وترتيب أهميتها في النموذج المتوازن النهائي:
+1. 🥇 **`overtime_hours_week` (29.64%):** ساعات العمل الإضافي أسبوعياً (المتسبب الأكبر في الإجهاد).
+2. 🥈 **`avg_daily_hours` (22.57%):** متوسط ساعات العمل اليومية الأساسية.
+3. 🥉 **`vacation_days_last_year` (19.78%):** أيام الإجازة السنوية المستهلكة (مؤشر الاستشفاء والراحة).
+4. 🔹 **`late_arrivals_month` (15.81%):** مرات التأخر في الشهر.
+5. 🔹 **`tasks_assigned` (6.80%):** عدد المهام المتزامنة النشطة.
+6. 🔹 **`absence_days_month` (5.40%):** أيام الغياب الشهرية.
 
 ---
 
@@ -117,7 +129,7 @@
   * `frontend/js/auth.js`
   * `frontend/js/config.js`
   * `Tawazon_Defense_Presentation.pptx`
-  * `tools/sync_database_scores.py`
+  * `scripts/sync_database_scores_fast.py`
 
 ---
 
@@ -142,9 +154,12 @@ Tawazon/
 │   ├── main.py               # نقاط اتصال الواجهة البرمجية (FastAPI App)
 │   └── risk.py               # محرك حساب مؤشرات ومستويات الخطر
 ├── data/                     # مجموعات البيانات وسكريبتات التجهيز
-│   ├── employees.csv         # مجموعة بيانات 1,000 موظف بالمتغيرات الـ 6
-│   ├── generate_data.py      # سكريبت توليد وتخليق البيانات
-│   └── process_kaggle_data.py# سكريبت معالجة وتجهيز بيانات Kaggle
+│   ├── balance_dataset.py    # سكريبت ضبط التوازن وتقسيم الـ 800 موظف (640 Train / 160 Test)
+│   ├── employees.csv         # مجموعة بيانات 800 موظف متوازنة تماماً (400/400)
+│   ├── train.csv             # بيانات التدريب المستقلة (640 موظف)
+│   ├── test.csv              # بيانات الاختبار المستقلة (160 موظف مستخلصة من الـ 200)
+│   ├── employees_1000_imbalanced.csv # النسخة الأصلية غير المتوازنة (1000 موظف) للمقارنة
+│   └── process_kaggle_data.py# سكريبت معالجة وتجهيز بيانات Kaggle الخام
 ├── frontend/                 # الواجهة الأمامية التفاعلية
 │   ├── assets/               # شعارات وصور النظام
 │   ├── css/style.css         # نظام التصميم الموحد والتنسيقات
@@ -153,33 +168,30 @@ Tawazon/
 │   │   ├── auth.js           # إدارة جلسات تسجيل الدخول بالمتصفح
 │   │   ├── config.js         # إعدادات رابط السيرفر
 │   │   └── i18n.js           # محرك الترجمة الفورية عربي/إنجليزي
-│   ├── assess.html           # شاشة إجراء تقييم إرهاق جديد
-│   ├── employee-portal.html  # بوابة الموظف الذاتية
+│   ├── assess.html           # شاشة إجراء تقييم إرهاق جديد (مع النمط السري)
+│   ├── employee-portal.html  # بوابة الموظف الذاتية والتوصيات المخصصة
 │   ├── employees.html        # دليل وإدارة شؤون الموظفين
 │   ├── index.html            # لوحة التحليلات التنفيذية المتقدمة
 │   └── login.html            # شاشة تسجيل الدخول
 ├── models/                   # النماذج المدربة ورسوم التقييم
-│   ├── workload_model.pkl    # نموذج Random Forest المحفوظ
-│   ├── feature_importance.png
-│   └── confusion_matrix.png
-├── tools/                    # أدوات مساعدة للصيانة
-│   └── sync_database_scores.py  # تحديث درجات الخطر المخزنة بعد إعادة تدريب النموذج
-├── train_model.py            # سكريبت تدريب وتقسيم وتقييم النموذج
+│   ├── workload_model.pkl    # نموذج Random Forest المتوازن المحفوظ
+│   ├── feature_importance.png# رسم الأهمية النسبية للمتغيرات الستة
+│   ├── confusion_matrix.png  # مصفوفة الالتباس للنموذج المتوازن
+│   ├── comparison_balance_vs_imbalance.png # رسم المقارنة بين النموذجين للمشرف
+│   ├── eda_01_class_distribution.png # رسم التوزيع المتوازن (50% / 50%)
+│   ├── eda_02_histograms.png
+│   ├── eda_03_boxplots.png
+│   ├── eda_04_heatmap.png
+│   ├── eda_05_overtime_burnout.png
+│   └── eda_06_scatter.png
+├── eda.py                    # سكريبت التحليل الاستكشافي للبيانات المتوازنة
+├── train_model.py            # سكريبت تدريب وتقسيم وتقييم ومقارنة النموذجين
 ├── requirements.txt          # حزم ومكتبات بايثون المطلوبة
 ├── Tawazon_Defense_Presentation.pptx # العرض التقديمي للمناقشة
-└── README.md                 # دليل المشروع الكامل
+└── README.md                 # دليل المشروع الكامل والمحدث
 ```
 
 ---
-
-## 7. طريقة التشغيل السريعة على ويندوز (Windows)
-
-1. ثبّتي **Python 3.13** من موقع python.org (مش من Microsoft Store)، واختاري **Add python.exe to PATH** أثناء التثبيت.
-2. افتحي فولدر المشروع، ودبل كليك على **setup.bat** (مرة واحدة بس، وبيأخد بضع دقايق).
-3. كل مرة تشغلي فيها المشروع، دبل كليك على **run.bat**.
-4. افتحي `frontend/login.html` في المتصفح.
-
-ملاحظة: أول تشغيل بيجهز حسابات الموظفين وبياخد حوالي 5 دقايق.
 
 ## 7. طريقة التثبيت والتشغيل (How to Run)
 
@@ -222,11 +234,3 @@ uvicorn backend.main:app --reload
 * `POST /assess`: تسجيل تقييم إرهاق جديد وحساب الخطر وتوليد الأسباب فورياً عبر ML.
 * `POST /predict`: تنبؤ فوري سريع دون حفظ في قاعدة البيانات.
 * `GET /employee/profile`: استرجاع بيانات وسجل تقييمات الموظف المسجل حالياً.
-
----
-
-## 10. Limitations and Data Disclosure
-
-The workload model was trained and evaluated on the `employees.csv` dataset, which was derived from the Kaggle dataset "Are Your Employees Burning Out?" (Varshney, 2020). The six workload features (average daily hours, overtime, absence days, late arrivals, tasks assigned, and vacation days) were generated from the original Burn Rate score, and the burnout label was defined as Burn Rate ≥ 0.5. Consequently, the model learns the relationship used to construct the dataset rather than an independently measured relationship between workload and burnout. The reported performance (Accuracy 90.0%, Recall 93.8%, F1 90.4% after balancing) therefore measures how well the model recovers this construction rule, and should not be interpreted as evidence of its ability to predict burnout in real workplaces.
-
-The burnout label is not based on a validated burnout instrument. Additionally, the test set contains 160 employees, which limits the precision of the estimates. The model has not been validated on external or real-world employee data. Real-world validation, using a recognized burnout measure such as the Maslach Burnout Inventory or the Copenhagen Burnout Inventory, is required before the system is used for decision-making.

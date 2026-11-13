@@ -30,6 +30,17 @@ FEATURE_LABELS = {
 }
 
 
+_cached_model = None
+_cached_explainer = None
+
+def get_explainer(model):
+    global _cached_model, _cached_explainer
+    if _cached_explainer is None or _cached_model is not model:
+        import shap
+        _cached_explainer = shap.TreeExplainer(model)
+        _cached_model = model
+    return _cached_explainer
+
 def get_top_reasons(
     model,
     employee_features: Dict[str, Any],
@@ -59,8 +70,8 @@ def get_top_reasons(
         x = np.array([[employee_features[f] for f in FEATURE_NAMES]])
         df_input = pd.DataFrame(x, columns=FEATURE_NAMES)
 
-        # Use TreeExplainer for Random Forest
-        explainer = shap.TreeExplainer(model)
+        # Use cached TreeExplainer for Random Forest
+        explainer = get_explainer(model)
         shap_values = explainer.shap_values(df_input)
 
         if isinstance(shap_values, list):

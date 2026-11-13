@@ -11,8 +11,8 @@ This script performs:
     2. Data Cleaning: Drop nulls, fix types, remove outliers
     3. Stratified Sampling: Select 1000 representative employees
     4. Feature Engineering & Mapping: Convert Kaggle columns to WorkPulse schema
-    5. Arabic Name Generation: Assign unique employee names
-    6. Save final clean employees.csv (1000 employees, 11 columns)
+    6. Arabic Name Generation: Assign unique employee names
+    7. Save final clean employees.csv (1000 employees, 10 columns)
 
 Output:
     data/employees.csv  — Clean dataset ready for the WorkPulse system

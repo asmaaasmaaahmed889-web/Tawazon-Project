@@ -15,11 +15,13 @@ from passlib.context import CryptContext
 
 # ── Database URL Configuration ────────────────────────────────────────────────
 # Supports PostgreSQL via environment variable (e.g. postgresql://user:password@localhost:5432/workpulse)
-# Falls back to local sqlite file if PostgreSQL URL is not set.
+# Falls back to local sqlite file in project root if PostgreSQL URL is not set.
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_DB_FILE = os.path.join(ROOT_DIR, "workpulse.db").replace("\\", "/")
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
-    # Local fallback so the application runs immediately without requiring local Postgres daemon
-    DATABASE_URL = "sqlite:///./workpulse.db"
+    DATABASE_URL = f"sqlite:///{DEFAULT_DB_FILE}"
 
 # Handle heroku/render postgres prefix compatibility
 if DATABASE_URL.startswith("postgres://"):

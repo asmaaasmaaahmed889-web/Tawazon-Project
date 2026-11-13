@@ -7,7 +7,7 @@ Features:
     - Role-based Access (Admin vs Employee)
     - Dynamic Employee Re-assessment & History Tracking
     - Live Dashboard Statistics
-    - Scikit-learn (Random Forest) + SHAP Integration
+    - Scikit-learn Random Forest + SHAP Explainability Integration
     - PostgreSQL & SQLite Dual Support via SQLAlchemy
 """
 
@@ -294,6 +294,7 @@ def _seed_employees_from_csv(db: Session):
         return
 
     probs = workload_model.predict_proba(df[NUMERIC_FEATURES])[:, 1] if workload_model else [0.5]*len(df)
+    default_hashed_pwd = hash_password("123456")  # Pre-compute hash for high-speed seeding
 
     for idx, row in df.iterrows():
         emp_id = str(row["employee_id"])
@@ -308,7 +309,7 @@ def _seed_employees_from_csv(db: Session):
             gender=gender_val,
             age=age_val,
             role="employee",
-            hashed_password=hash_password("123456")  # default password for seeded accounts
+            hashed_password=default_hashed_pwd
         )
         db.add(user)
         db.flush()
