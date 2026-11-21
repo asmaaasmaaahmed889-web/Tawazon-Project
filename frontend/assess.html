@@ -13,7 +13,7 @@
 
 <nav>
   <div class="nav-start">
-    <a href="index.html" class="nav-brand"><img src="assets/logo.png" alt="Tawazon Logo" class="brand-logo-img" /><span class="brand-tawa">Tawa</span><span class="brand-zon">zon</span></a>
+    <a href="index.html" class="nav-brand"><img src="assets/logo.png" alt="Tawazon Logo" class="brand-logo-img" /><span class="brand-name"><span class="brand-tawa">Tawa</span><span class="brand-zon">zon</span></span></a>
     <a href="index.html"           data-i18n="nav_dashboard">Dashboard</a>
     <a href="employees.html"       data-i18n="nav_employees">Employees</a>
     <a href="assess.html"          data-i18n="nav_assessment" class="active">New Assessment</a>
@@ -83,11 +83,11 @@
       </div>
 
       <!-- Quick fill -->
-      <div style="margin-bottom:1.5rem;display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;">
-        <span style="font-size:.85rem;color:var(--muted);" data-i18n="assess_quickfill">Quick fill:</span>
-        <button type="button" class="page-btn" onclick="fillExample('high')" data-i18n="assess_high_ex">High Risk Example</button>
-        <button type="button" class="page-btn" onclick="fillExample('medium')" data-i18n="assess_med_ex">Medium Risk Example</button>
-        <button type="button" class="page-btn" onclick="fillExample('low')" data-i18n="assess_low_ex">Low Risk Example</button>
+      <div style="margin-bottom:1.5rem;display:flex;gap:.65rem;flex-wrap:wrap;align-items:center;">
+        <span style="font-size:.85rem;font-weight:700;color:var(--muted);" data-i18n="assess_quickfill">Quick fill:</span>
+        <button type="button" class="quick-pill high" onclick="fillExample('high')"><span data-i18n="assess_high_ex">High Risk Example</span> 🔴</button>
+        <button type="button" class="quick-pill med" onclick="fillExample('medium')"><span data-i18n="assess_med_ex">Medium Risk Example</span> 🟡</button>
+        <button type="button" class="quick-pill low" onclick="fillExample('low')"><span data-i18n="assess_low_ex">Low Risk Example</span> 🟢</button>
       </div>
 
       <button type="submit" class="btn-primary" id="submitBtn">

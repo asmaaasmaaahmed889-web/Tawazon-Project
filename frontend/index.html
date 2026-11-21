@@ -15,9 +15,11 @@
 <!-- ── Navigation ─────────────────────────────────────────── -->
 <nav>
   <div class="nav-start">
-    <a href="index.html" class="nav-brand"><img src="assets/logo.png" alt="Tawazon Logo" class="brand-logo-img" /><span class="brand-tawa">Tawa</span><span class="brand-zon">zon</span> <span class="brand-role">(Admin)</span></a>
-    <a href="index.html"        data-i18n="nav_dashboard" class="active">Dashboard</a>
-    <a href="employees.html"    data-i18n="nav_employees">Employees</a>
+    <a href="index.html" class="nav-brand"><img src="assets/logo.png" alt="Tawazon Logo" class="brand-logo-img" /><span class="brand-name"><span class="brand-tawa">Tawa</span><span class="brand-zon">zon</span></span> <span class="brand-role">(Admin)</span></a>
+    <a href="index.html"           data-i18n="nav_dashboard" class="active">Dashboard</a>
+    <a href="employees.html"       data-i18n="nav_employees">Employees</a>
+    <a href="assess.html"          data-i18n="nav_assessment">New Assessment</a>
+    <a href="employee-portal.html" data-i18n="nav_portal">Employee Portal</a>
   </div>
   <div class="nav-end">
     <button class="lang-btn" onclick="i18n.toggle()"><span class="nav-btn-icon">🌐</span> <span>العربية</span></button>
@@ -66,23 +68,35 @@
   <!-- Primary Risk Level KPIs -->
   <div class="kpi-row">
     <div class="kpi-card">
-      <div class="kpi-title" data-i18n="dash_total">Total Employees</div>
+      <div class="kpi-header-row">
+        <div class="kpi-title" data-i18n="dash_total">Total Employees</div>
+        <div class="kpi-icon-badge">👥</div>
+      </div>
       <div class="kpi-val" id="statTotal">—</div>
       <div class="kpi-sub" data-i18n="dash_total_sub">Active workforce</div>
     </div>
     <div class="kpi-card low">
-      <div class="kpi-title" data-i18n="dash_low">Healthy & Balanced</div>
-      <div class="kpi-val" style="color:var(--green);" id="statLow">—</div>
+      <div class="kpi-header-row">
+        <div class="kpi-title" data-i18n="dash_low">Healthy & Balanced</div>
+        <div class="kpi-icon-badge">🛡️</div>
+      </div>
+      <div class="kpi-val" style="color:var(--risk-low);" id="statLow">—</div>
       <div class="kpi-sub" id="statLowPct">—</div>
     </div>
     <div class="kpi-card med">
-      <div class="kpi-title" data-i18n="dash_medium">Moderate Workload</div>
-      <div class="kpi-val" style="color:var(--yellow);" id="statMedium">—</div>
+      <div class="kpi-header-row">
+        <div class="kpi-title" data-i18n="dash_medium">Moderate Workload</div>
+        <div class="kpi-icon-badge">⚠️</div>
+      </div>
+      <div class="kpi-val" style="color:var(--risk-med);" id="statMedium">—</div>
       <div class="kpi-sub" id="statMediumPct">—</div>
     </div>
     <div class="kpi-card high">
-      <div class="kpi-title" data-i18n="dash_high">Critical Burnout Risk 🔴</div>
-      <div class="kpi-val" style="color:var(--red);" id="statHigh">—</div>
+      <div class="kpi-header-row">
+        <div class="kpi-title" data-i18n="dash_high">Critical Burnout Risk 🔴</div>
+        <div class="kpi-icon-badge">🔥</div>
+      </div>
+      <div class="kpi-val" style="color:var(--risk-high);" id="statHigh">—</div>
       <div class="kpi-sub" id="statHighPct">—</div>
     </div>
   </div>
@@ -90,22 +104,34 @@
   <!-- Secondary Operational Metrics KPIs -->
   <div class="kpi-row">
     <div class="kpi-card">
-      <div class="kpi-title" data-i18n="dash_kpi_avg_hours">Daily Hours Avg</div>
+      <div class="kpi-header-row">
+        <div class="kpi-title" data-i18n="dash_kpi_avg_hours">Daily Hours Avg</div>
+        <div class="kpi-icon-badge">⏱️</div>
+      </div>
       <div class="kpi-val" id="statAvgHours">—<span style="font-size:1.1rem; color:var(--muted); font-weight:600;">h</span></div>
       <div class="kpi-sub">Benchmark: 8.0h</div>
     </div>
     <div class="kpi-card purple">
-      <div class="kpi-title" data-i18n="dash_kpi_avg_ot">Weekly Overtime Avg</div>
+      <div class="kpi-header-row">
+        <div class="kpi-title" data-i18n="dash_kpi_avg_ot">Weekly Overtime Avg</div>
+        <div class="kpi-icon-badge">⏳</div>
+      </div>
       <div class="kpi-val" id="statAvgOt">—<span style="font-size:1.1rem; color:var(--muted); font-weight:600;">h</span></div>
       <div class="kpi-sub">Over standard 40h/wk</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-title" data-i18n="dash_kpi_avg_tasks">Avg Active Tasks</div>
+      <div class="kpi-header-row">
+        <div class="kpi-title" data-i18n="dash_kpi_avg_tasks">Avg Active Tasks</div>
+        <div class="kpi-icon-badge">📋</div>
+      </div>
       <div class="kpi-val" id="statAvgTasks">—</div>
       <div class="kpi-sub">Concurrent assignments</div>
     </div>
     <div class="kpi-card high">
-      <div class="kpi-title" data-i18n="dash_kpi_avg_score">Workforce Risk Index</div>
+      <div class="kpi-header-row">
+        <div class="kpi-title" data-i18n="dash_kpi_avg_score">Workforce Risk Index</div>
+        <div class="kpi-icon-badge">📊</div>
+      </div>
       <div class="kpi-val" id="statAvgScore">—<span style="font-size:1.1rem; color:var(--muted); font-weight:600;">/100</span></div>
       <div class="kpi-sub">AI composite fatigue index</div>
     </div>
@@ -154,16 +180,20 @@
   </div>
 
   <!-- AI Executive Insight Card -->
-  <div class="card" style="margin-top:2rem; background:linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%); border-left:5px solid #2563eb;">
-    <div style="display:flex; align-items:flex-start; gap:1rem;">
-      <div style="font-size:2rem;">💡</div>
-      <div>
-        <h4 style="font-size:1rem; font-weight:800; color:#1e3a8a; margin-bottom:.3rem;" data-i18n="dash_ai_insights">AI Executive Recommendations</h4>
-        <p id="aiInsightText" style="font-size:.9rem; color:#334155; line-height:1.6;">
-          Analyzing current workload metrics across your enterprise...
-        </p>
+  <div class="ai-copilot-card">
+    <div class="ai-copilot-header">
+      <div class="ai-copilot-title">
+        <span style="font-size:1.4rem;">💡</span>
+        <h4 data-i18n="dash_ai_insights">AI Executive Recommendations & Diagnostics</h4>
+      </div>
+      <div class="ai-live-pill">
+        <span class="ai-pulse-dot"></span>
+        <span>Active Engine</span>
       </div>
     </div>
+    <p id="aiInsightText" style="font-size:.95rem; color:#334155; line-height:1.65; margin:0;">
+      Analyzing current workload metrics across your enterprise...
+    </p>
   </div>
 
   <!-- Error alert -->

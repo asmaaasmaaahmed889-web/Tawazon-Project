@@ -11,18 +11,19 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <style>
     .user-badge-header {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: var(--radius);
-      padding: 1.25rem 1.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+      border: 1.5px solid #bfdbfe;
+      border-radius: var(--radius-xl);
+      padding: 1.5rem 2rem;
       margin-bottom: 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 1.25rem;
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.08);
     }
-    .user-info h2 { font-size: 1.25rem; font-weight: 800; color: #1e3a8a; }
+    .user-info h2 { font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0; }
     .user-info p { color: #3b82f6; font-size: .88rem; margin-top: .2rem; }
     .btn-logout {
       background: #fee2e2;
@@ -64,7 +65,7 @@
 
 <nav>
   <div class="nav-start">
-    <a href="employee-portal.html" class="nav-brand"><img src="assets/logo.png" alt="Tawazon Logo" class="brand-logo-img" /><span class="brand-tawa">Tawa</span><span class="brand-zon">zon</span></a>
+    <a href="employee-portal.html" class="nav-brand"><img src="assets/logo.png" alt="Tawazon Logo" class="brand-logo-img" /><span class="brand-name"><span class="brand-tawa">Tawa</span><span class="brand-zon">zon</span></span></a>
   </div>
   <div class="nav-end">
     <span style="color:#94a3b8; font-size:.88rem; font-weight:600; margin-inline-end:.5rem;" id="navUserName"></span>
@@ -76,13 +77,19 @@
 <main>
   <!-- User Profile Header -->
   <div class="user-badge-header">
-    <div class="user-info">
-      <h2 id="profileFullName">—</h2>
-      <p id="profileUsername">@—</p>
-      <p id="profileMeta" style="color:var(--muted); font-size:.85rem; margin-top:.2rem;"></p>
+    <div style="display:flex; align-items:center; gap:1.25rem;">
+      <div class="user-avatar-circle" id="userAvatar">EP</div>
+      <div class="user-info">
+        <h2 id="profileFullName">—</h2>
+        <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.25rem; flex-wrap:wrap;">
+          <span id="profileUsername" style="color:#2563eb; font-weight:700; font-size:0.9rem;">@—</span>
+          <span style="color:#cbd5e1;">•</span>
+          <span id="profileMeta" style="color:var(--muted); font-size:0.85rem; font-weight:600;"></span>
+        </div>
+      </div>
     </div>
     <div>
-      <span class="badge" id="currentRiskBadge" style="font-size:.9rem; padding:.5rem 1rem;">جاري التحميل...</span>
+      <span class="badge" id="currentRiskBadge" style="font-size:0.92rem; padding:0.55rem 1.15rem; font-weight:800;">جاري التحميل...</span>
     </div>
   </div>
 
@@ -226,6 +233,12 @@
   document.getElementById("profileFullName").textContent = currentUser.full_name;
   document.getElementById("profileUsername").textContent = `@${currentUser.username}`;
   document.getElementById("navUserName").textContent = currentUser.full_name;
+
+  const initials = currentUser.full_name
+    ? currentUser.full_name.trim().split(/\s+/).map(n => n[0]).slice(0, 2).join("").toUpperCase()
+    : "EP";
+  const avatarEl = document.getElementById("userAvatar");
+  if (avatarEl) avatarEl.textContent = initials;
 
   if (document.getElementById("profileMeta")) {
     const isAr = typeof i18n !== "undefined" && i18n.lang() === "ar";
