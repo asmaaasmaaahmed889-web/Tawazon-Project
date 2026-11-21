@@ -1,8 +1,8 @@
 """
 reseed_db.py
 ============
-High-Speed Database Seeder for Tawazon (800 Balanced Employees)
-Reseeds the database with clean, balanced employee records and their
+High-Speed Database Seeder for Tawazon (160 Test Employees Active Workforce)
+Reseeds the database with clean test employee records (160 records) and their
 assessments predicted by the updated Random Forest model.
 """
 
@@ -20,7 +20,7 @@ from database import SessionLocal, User, Assessment, hash_password, init_db
 from risk import compute_risk
 from explain import get_top_reasons
 
-DATA_PATH = os.path.join(ROOT, "data", "employees.csv")
+DATA_PATH = os.path.join(ROOT, "data", "test.csv")
 MODEL_PATH = os.path.join(ROOT, "models", "workload_model.pkl")
 
 NUMERIC_FEATURES = [
@@ -35,7 +35,7 @@ NUMERIC_FEATURES = [
 
 def reseed():
     print("=" * 65)
-    print("  TAWAZON: High-Speed Database Reseeder (800 Balanced Employees)")
+    print("  TAWAZON: High-Speed Database Reseeder (160 Test Employees)")
     print("=" * 65)
 
     if not os.path.exists(DATA_PATH):
@@ -60,7 +60,7 @@ def reseed():
 
         # 3. Read dataset
         df = pd.read_csv(DATA_PATH)
-        print(f"[3/4] Loaded {len(df)} balanced employee records from {DATA_PATH}")
+        print(f"[3/4] Loaded {len(df)} test employee records from {DATA_PATH}")
 
         # Batch ML predictions
         probs = workload_model.predict_proba(df[NUMERIC_FEATURES])[:, 1] if workload_model else [0.5] * len(df)
@@ -111,7 +111,7 @@ def reseed():
             db.add(assessment)
 
         db.commit()
-        print(f"\n[Success] Database reseeded with {len(df)} balanced employees! ✅")
+        print(f"\n[Success] Database reseeded with {len(df)} test employees! ✅")
 
         # Quick breakdown
         counts = {"Low": 0, "Medium": 0, "High": 0}

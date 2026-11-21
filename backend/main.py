@@ -49,7 +49,7 @@ from risk import compute_risk
 from explain import get_top_reasons
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-DATA_PATH  = ROOT.parent / "data" / "employees.csv"
+DATA_PATH  = ROOT.parent / "data" / "test.csv"
 MODEL_PATH = ROOT.parent / "models" / "workload_model.pkl"
 
 # ── Global state ──────────────────────────────────────────────────────────────
@@ -90,7 +90,7 @@ async def lifespan(app: FastAPI):
     try:
         employee_count = db.query(User).filter(User.role == "employee").count()
         if employee_count == 0 and DATA_PATH.exists():
-            print("[Startup] Seeding initial 50 employees into database...")
+            print("[Startup] Seeding initial 160 test employees into database...")
             _seed_employees_from_csv(db)
             print("[Startup] Seeding complete ✅")
     finally:

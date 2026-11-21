@@ -1,8 +1,7 @@
 """
 train_model.py
 ==============
-Trains and evaluates the Workload Burnout Prediction model according to
-the supervisor Dr. Amir Al-Attar's directive:
+Trains and evaluates the Workload Burnout Prediction model (Balanced Dataset):
 1. Trains on Balanced Data:
    - data/train.csv (640 records: 320 Burnout, 320 No Burnout)
    - Evaluates on data/test.csv (160 records: 80 Burnout, 80 No Burnout)
@@ -93,7 +92,6 @@ def evaluate_model_metrics(model, X_test, y_test):
 def main():
     print("=" * 75)
     print("  TAWAZON — MODEL TRAINING & PERFORMANCE COMPARISON")
-    print("  Directive: Dr. Amir Al-Attar (Supervisor Follow-up)")
     print("=" * 75)
 
     # ──────────────────────────────────────────────────────────────────────────
@@ -169,10 +167,10 @@ def main():
     print(f"  Accuracy: {metrics_bal['Accuracy']*100:.2f}% | F1: {metrics_bal['F1-Score']*100:.2f}% | Recall: {metrics_bal['Recall (Sensitivity)']*100:.2f}%")
 
     # ──────────────────────────────────────────────────────────────────────────
-    # 3. DIRECT PERFORMANCE COMPARISON TABLE (Requested by Dr. Amir Al-Attar)
+    # 3. DIRECT PERFORMANCE COMPARISON TABLE
     # ──────────────────────────────────────────────────────────────────────────
     print("\n" + "=" * 75)
-    print("  SUPERVISOR COMPARISON TABLE: [ Imbalance vs. Balance ]")
+    print("  PERFORMANCE COMPARISON TABLE: [ Imbalance vs. Balance ]")
     print("=" * 75)
 
     comparison_df = pd.DataFrame({
@@ -208,7 +206,7 @@ def main():
             f"{metrics_imb['FN']}",
             f"{metrics_imb['TP']}"
         ],
-        "Balance Model (Supervisor Directives)": [
+        "Balance Model (800 Dataset)": [
             f"{len(train_df) + len(test_df)} employees",
             f"400 / 400 (50.0% / 50.0%)",
             f"{len(X_train_bal)} (80%)",
@@ -343,7 +341,7 @@ def main():
     axes[1].set_ylabel("True Label", fontweight="bold")
     axes[1].set_xlabel("Predicted Label", fontweight="bold")
 
-    fig.suptitle("Supervisor Review: Performance Comparison (Imbalance vs. Balance)", fontsize=13, fontweight="bold", y=1.02)
+    fig.suptitle("Performance Comparison (Imbalance vs. Balance)", fontsize=13, fontweight="bold", y=1.02)
     plt.tight_layout()
     comp_plot_path = os.path.join(MODEL_DIR, "comparison_balance_vs_imbalance.png")
     plt.savefig(comp_plot_path, dpi=130, bbox_inches="tight")
