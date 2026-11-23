@@ -355,22 +355,24 @@
     }).join("");
 
     document.getElementById("tableContainer").innerHTML = `
-      <table>
-        <thead>
-          <tr>
-            <th data-i18n="emp_col_id">${i18n.t("emp_col_id")}</th>
-            <th class="col-name" data-i18n="emp_col_name">${i18n.t("emp_col_name")}</th>
-            <th data-i18n="emp_col_hours">${i18n.t("emp_col_hours")}</th>
-            <th data-i18n="emp_col_ot">${i18n.t("emp_col_ot")}</th>
-            <th data-i18n="emp_col_abs">${i18n.t("emp_col_abs")}</th>
-            <th data-i18n="emp_col_tasks">${i18n.t("emp_col_tasks")}</th>
-            <th style="min-width:140px;" data-i18n="emp_col_score">${i18n.t("emp_col_score")}</th>
-            <th data-i18n="emp_col_level">${i18n.t("emp_col_level")}</th>
-            <th class="col-actions" data-i18n="emp_col_actions">${i18n.t("emp_col_actions")}</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="emp_col_id">${i18n.t("emp_col_id")}</th>
+              <th class="col-name" data-i18n="emp_col_name">${i18n.t("emp_col_name")}</th>
+              <th data-i18n="emp_col_hours">${i18n.t("emp_col_hours")}</th>
+              <th data-i18n="emp_col_ot">${i18n.t("emp_col_ot")}</th>
+              <th data-i18n="emp_col_abs">${i18n.t("emp_col_abs")}</th>
+              <th data-i18n="emp_col_tasks">${i18n.t("emp_col_tasks")}</th>
+              <th style="min-width:125px;" data-i18n="emp_col_score">${i18n.t("emp_col_score")}</th>
+              <th data-i18n="emp_col_level">${i18n.t("emp_col_level")}</th>
+              <th class="col-actions" data-i18n="emp_col_actions">${i18n.t("emp_col_actions")}</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
       <p style="margin-top:.75rem;font-size:.8rem;color:var(--muted);">
         ${i18n.t("emp_showing")} ${start+1}–${Math.min(start+pageSize,total)} ${i18n.t("emp_of")} ${total} ${i18n.t("emp_employees")}
       </p>`;

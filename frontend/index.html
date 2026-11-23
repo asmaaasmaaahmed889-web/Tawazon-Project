@@ -278,7 +278,7 @@
         <td><strong>${emp.overtime_hours_week.toFixed(1)}h</strong> / wk</td>
         <td>${emp.avg_daily_hours.toFixed(1)}h / day</td>
         <td>${emp.tasks_assigned} tasks</td>
-        <td>
+        <td class="col-actions">
           <a href="employees.html" class="btn-action edit" style="text-decoration:none;">
             🔍 ${i18n.t("dash_btn_inspect")}
           </a>
@@ -287,20 +287,22 @@
     `).join("");
 
     container.innerHTML = `
-      <table>
-        <thead>
-          <tr>
-            <th data-i18n="emp_col_id">${i18n.t("emp_col_id")}</th>
-            <th class="col-name" data-i18n="emp_col_name">${i18n.t("emp_col_name")}</th>
-            <th style="min-width:140px;" data-i18n="dash_col_score">${i18n.t("dash_col_score")}</th>
-            <th data-i18n="dash_col_ot">${i18n.t("dash_col_ot")}</th>
-            <th data-i18n="emp_col_hours">${i18n.t("emp_col_hours")}</th>
-            <th data-i18n="emp_col_tasks">${i18n.t("emp_col_tasks")}</th>
-            <th data-i18n="dash_col_action">${i18n.t("dash_col_action")}</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="emp_col_id">${i18n.t("emp_col_id")}</th>
+              <th class="col-name" data-i18n="emp_col_name">${i18n.t("emp_col_name")}</th>
+              <th style="min-width:125px;" data-i18n="dash_col_score">${i18n.t("dash_col_score")}</th>
+              <th data-i18n="dash_col_ot">${i18n.t("dash_col_ot")}</th>
+              <th data-i18n="emp_col_hours">${i18n.t("emp_col_hours")}</th>
+              <th data-i18n="emp_col_tasks">${i18n.t("emp_col_tasks")}</th>
+              <th class="col-actions" data-i18n="dash_col_action">${i18n.t("dash_col_action")}</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
     `;
   }
 
